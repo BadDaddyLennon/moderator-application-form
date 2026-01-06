@@ -171,23 +171,23 @@
 
             <div class="space-y-6">
                 <div>
-                    <label class="ember-label" style="min-height: unset;">Availability: Which days/times can you moderate?</label>
+                    <label class="ember-label">Availability: Which days/times can you moderate?</label>
                     <input type="text" id="avail" required class="ember-input px-4 py-3">
                 </div>
                 <div>
-                    <label class="ember-label" style="min-height: unset;">Previous moderation experience? (Please explain)</label>
+                    <label class="ember-label">Previous moderation experience? (Please explain)</label>
                     <textarea id="modExp" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
                 <div>
-                    <label class="ember-label" style="min-height: unset;">Are you familiar with in-game commands?</label>
+                    <label class="ember-label">Are you familiar with in-game commands?</label>
                     <textarea id="cmdExp" rows="2" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
                 <div>
-                    <label class="ember-label" style="min-height: unset;">Scenario: A player is toxic in global chat. How do you respond?</label>
+                    <label class="ember-label">Scenario: A player is toxic in global chat. How do you respond?</label>
                     <textarea id="scenario" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
                 <div>
-                    <label class="ember-label" style="min-height: unset;">Why do you want to be a moderator?</label>
+                    <label class="ember-label">Why do you want to be a moderator?</label>
                     <textarea id="why" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
             </div>
@@ -233,7 +233,8 @@
         for (let i = 0; i < (window.innerWidth < 768 ? 30 : 60); i++) particles.push(new Particle());
         animate();
 
-        const DISCORD_URL = "https://discord.com/api/webhooks/1457902937601999002/F6p2N_6UluwEPR2IZHG-9CmmaxLgkvDREFSx0dJERev00Ldk_wBl39u-nqIncncspbbx";
+        // UPDATED WEBHOOK URL
+        const DISCORD_URL = "https://discord.com/api/webhooks/1458179743600873751/39W8sejujTKBbFUVQUIH98_gFS121UmZ6FeVoB7eR-iKuF-LUw6sLGvp03MDIDQyhgzj";
 
         async function transmitData() {
             const btn = document.getElementById('submitBtn');
@@ -241,7 +242,7 @@
             const ageVal = document.querySelector('input[name="age"]:checked')?.value || "None";
             const platforms = Array.from(document.querySelectorAll('.check-plat:checked')).map(el => el.value).join(', ') || "None";
             
-            // CYAN ANSI COLOR CODE FOR DISCORD [36m is Cyan
+            // CYAN ANSI COLOR CODE [36m
             const cyan = (text) => "```ansi\n\u001b[36m" + text + "```";
 
             if(!document.getElementById('discord').value || ageVal === "None") {
@@ -257,7 +258,7 @@
                 avatar_url: "https://i.imgur.com/K3y7K9S.png",
                 embeds: [{
                     title: "📂 MODERATOR APPLICATION RECEIVED",
-                    color: 65535, // Cyan Hex converted to Decimal
+                    color: 65535, 
                     fields: [
                         { name: "Discord", value: cyan(document.getElementById('discord').value), inline: true },
                         { name: "In-Game Name", value: cyan(document.getElementById('ign').value), inline: true },
@@ -290,7 +291,7 @@
                     btn.innerText = "SUCCESS";
                 } else { throw new Error(); }
             } catch (err) {
-                alert("Submission failed. Host the file online to bypass browser security.");
+                alert("Submission failed. Ensure you are hosting this file online (e.g., GitHub Pages).");
                 btn.disabled = false;
                 btn.innerText = "RETRY SUBMIT";
             }
