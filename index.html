@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARKLegendsPVE | Moderator Application</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ark-cyan': '#00fbff',
+                        'ark-blue': '#0081a7',
+                        'ark-obsidian': '#0a0a0c',
+                    },
+                    fontFamily: { 'ark': ['Oxanium', 'cursive'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;800&display=swap');
+        
+        body {
+            background-color: #0a0a0c;
+            background-image: linear-gradient(rgba(10, 10, 12, 0.85), rgba(10, 10, 12, 0.85)), 
+                              url('https://images.alphacoders.com/606/606013.jpg');
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+            font-family: 'Oxanium', cursive;
+            min-height: 100vh;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        #emberCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .obsidian-panel {
+            background: rgba(10, 25, 30, 0.95);
+            border: 1px solid rgba(0, 251, 255, 0.4);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 251, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        .ember-input {
+            background: rgba(5, 5, 5, 0.8);
+            border: 1px solid rgba(0, 251, 255, 0.2);
+            color: #fff;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .ember-input:focus {
+            border-color: #00fbff;
+            box-shadow: 0 0 15px rgba(0, 251, 255, 0.4);
+            outline: none;
+        }
+
+        .ember-label {
+            color: #00fbff;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(0, 251, 255, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .ember-label { min-height: 2.5rem; }
+        }
+
+        .custom-check {
+            appearance: none;
+            width: 1.2rem; height: 1.2rem;
+            border: 1px solid #00fbff;
+            background: #000;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .custom-check:checked { background: #00fbff; box-shadow: 0 0 10px #00fbff; }
+        .custom-check:checked::after {
+            content: ''; position: absolute;
+            width: 5px; height: 10px; border: solid #000;
+            border-width: 0 2px 2px 0; left: 6px; top: 2px;
+            transform: rotate(45deg);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #0081a7, #00fbff);
+            color: #000; font-weight: 800;
+            letter-spacing: 2px; text-transform: uppercase;
+            transition: all 0.4s ease;
+            border: none;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-12">
+
+    <canvas id="emberCanvas"></canvas>
+
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight text-white uppercase italic drop-shadow-[0_0_20px_rgba(0,251,255,0.4)]">
+                ARK<span class="text-ark-cyan">Legends</span>PVE
+            </h1>
+            <p class="mt-4 text-ark-cyan font-bold uppercase tracking-[0.5em] text-[10px] opacity-80">Moderator Application</p>
+        </header>
+
+        <form id="appForm" class="obsidian-panel p-6 sm:p-8 md:p-12 space-y-8 rounded-lg">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="ember-label">Discord Name</label>
+                    <input type="text" id="discord" required placeholder="Survivor#0001" class="ember-input px-4 py-3">
+                </div>
+                <div>
+                    <label class="ember-label">In-Game Name</label>
+                    <input type="text" id="ign" required placeholder="Character Name" class="ember-input px-4 py-3">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="ember-label">Age Range</label>
+                    <div class="grid grid-cols-2 gap-3 mt-1">
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="age" value="18-30" class="custom-check"> <span>18-30</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="age" value="30-50" class="custom-check"> <span>30-50</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="age" value="50-70" class="custom-check"> <span>50-70</span></label>
+                        <label class="flex items-center space-x-3 cursor-pointer"><input type="radio" name="age" value="70+" class="custom-check"> <span>70+</span></label>
+                    </div>
+                </div>
+                <div>
+                    <label class="ember-label">Country / Timezone</label>
+                    <input type="text" id="timezone" required placeholder="e.g. UK / GMT" class="ember-input px-4 py-3">
+                </div>
+            </div>
+
+            <div>
+                <label class="ember-label" style="min-height: unset;">Platform Selection</label>
+                <div class="flex flex-wrap gap-6 bg-black/30 p-4 rounded border border-white/5 mt-2">
+                    <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="platform" value="PC" class="custom-check check-plat"> <span class="uppercase">PC</span></label>
+                    <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="platform" value="XBOX" class="custom-check check-plat"> <span class="uppercase">XBOX</span></label>
+                    <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" name="platform" value="PSN" class="custom-check check-plat"> <span class="uppercase">PSN</span></label>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="ember-label">How long have you been playing Ark</label>
+                    <input type="text" id="playtime" required class="ember-input px-4 py-3">
+                </div>
+                <div>
+                    <label class="ember-label">How long have you been a player on ArkLegendsPVE?</label>
+                    <input type="text" id="arkLegendsTime" required class="ember-input px-4 py-3">
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div>
+                    <label class="ember-label" style="min-height: unset;">Availability: Which days/times can you moderate?</label>
+                    <input type="text" id="avail" required class="ember-input px-4 py-3">
+                </div>
+                <div>
+                    <label class="ember-label" style="min-height: unset;">Previous moderation experience? (Please explain)</label>
+                    <textarea id="modExp" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="ember-label" style="min-height: unset;">Are you familiar with in-game commands?</label>
+                    <textarea id="cmdExp" rows="2" required class="ember-input px-4 py-3 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="ember-label" style="min-height: unset;">Scenario: A player is toxic in global chat. How do you respond?</label>
+                    <textarea id="scenario" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="ember-label" style="min-height: unset;">Why do you want to be a moderator?</label>
+                    <textarea id="why" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
+                </div>
+            </div>
+
+            <div class="pt-8">
+                <button type="button" id="submitBtn" onclick="transmitData()" class="w-full submit-btn py-5 text-xl rounded-sm">
+                    Submit Application
+                </button>
+                <p id="statusMsg" class="text-center mt-6 font-bold uppercase text-[10px] tracking-[0.4em] opacity-0 transition-all"></p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // --- CYAN PARTICLE ENGINE ---
+        const canvas = document.getElementById('emberCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function initCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() { this.init(); }
+            init() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100;
+                this.size = Math.random() * 2 + 1;
+                this.speedY = Math.random() * 1.5 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+            update() { this.y -= this.speedY; this.x += this.speedX; if (this.y < -10) this.init(); }
+            draw() {
+                ctx.fillStyle = `rgba(0, 251, 255, ${this.opacity})`;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        for (let i = 0; i < (window.innerWidth < 768 ? 30 : 60); i++) particles.push(new Particle());
+        animate();
+
+        const DISCORD_URL = "https://discord.com/api/webhooks/1457902937601999002/F6p2N_6UluwEPR2IZHG-9CmmaxLgkvDREFSx0dJERev00Ldk_wBl39u-nqIncncspbbx";
+
+        async function transmitData() {
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('statusMsg');
+            const ageVal = document.querySelector('input[name="age"]:checked')?.value || "None";
+            const platforms = Array.from(document.querySelectorAll('.check-plat:checked')).map(el => el.value).join(', ') || "None";
+            
+            // CYAN ANSI COLOR CODE FOR DISCORD [36m is Cyan
+            const cyan = (text) => "```ansi\n\u001b[36m" + text + "```";
+
+            if(!document.getElementById('discord').value || ageVal === "None") {
+                alert("Please fill in Discord Name and Age Range.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "SUBMITTING...";
+
+            const payload = {
+                username: "ARKLegends Recruitment",
+                avatar_url: "https://i.imgur.com/K3y7K9S.png",
+                embeds: [{
+                    title: "📂 MODERATOR APPLICATION RECEIVED",
+                    color: 65535, // Cyan Hex converted to Decimal
+                    fields: [
+                        { name: "Discord", value: cyan(document.getElementById('discord').value), inline: true },
+                        { name: "In-Game Name", value: cyan(document.getElementById('ign').value), inline: true },
+                        { name: "Age Range", value: cyan(ageVal), inline: true },
+                        { name: "Country/TZ", value: cyan(document.getElementById('timezone').value), inline: true },
+                        { name: "Platform", value: cyan(platforms), inline: true },
+                        { name: "Time on Ark", value: cyan(document.getElementById('playtime').value), inline: true },
+                        { name: "Time on ArkLegends", value: cyan(document.getElementById('arkLegendsTime').value), inline: true },
+                        { name: "Availability", value: cyan(document.getElementById('avail').value) },
+                        { name: "Mod Experience", value: cyan(document.getElementById('modExp').value) },
+                        { name: "Commands Knowledge", value: cyan(document.getElementById('cmdExp').value) },
+                        { name: "Scenario Handling", value: cyan(document.getElementById('scenario').value) },
+                        { name: "Motivation (Why)", value: cyan(document.getElementById('why').value) }
+                    ],
+                    timestamp: new Date()
+                }]
+            };
+
+            try {
+                const response = await fetch(DISCORD_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    msg.innerText = "TRANSMISSION SUCCESSFUL. THANK YOU FOR YOUR APPLICATION.";
+                    msg.className = "text-center mt-6 font-bold uppercase text-[10px] text-ark-cyan opacity-100";
+                    document.getElementById('appForm').reset();
+                    btn.innerText = "SUCCESS";
+                } else { throw new Error(); }
+            } catch (err) {
+                alert("Submission failed. Host the file online to bypass browser security.");
+                btn.disabled = false;
+                btn.innerText = "RETRY SUBMIT";
+            }
+        }
+    </script>
+</body>
+</html>
