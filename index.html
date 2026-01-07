@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ARKLegendsPVE | Moderator Application</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -105,7 +105,10 @@
             letter-spacing: 2px; text-transform: uppercase;
             transition: all 0.4s ease;
             border: none;
+            cursor: pointer;
         }
+
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-12">
@@ -176,19 +179,19 @@
                 </div>
                 <div>
                     <label class="ember-label" style="min-height: unset;">Previous moderation experience? (Please explain)</label>
-                    <textarea id="modExp" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
+                    <textarea id="modExp" rows="5" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
                 <div>
                     <label class="ember-label" style="min-height: unset;">Are you familiar with in-game commands?</label>
-                    <textarea id="cmdExp" rows="2" required class="ember-input px-4 py-3 resize-none"></textarea>
+                    <textarea id="cmdExp" rows="4" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
                 <div>
                     <label class="ember-label" style="min-height: unset;">Scenario: A player is toxic in global chat. How do you respond?</label>
-                    <textarea id="scenario" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
+                    <textarea id="scenario" rows="6" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
                 <div>
                     <label class="ember-label" style="min-height: unset;">Why do you want to be a moderator?</label>
-                    <textarea id="why" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
+                    <textarea id="why" rows="6" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
             </div>
 
@@ -202,7 +205,6 @@
     </div>
 
     <script>
-        // --- CYAN PARTICLE ENGINE ---
         const canvas = document.getElementById('emberCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -233,15 +235,18 @@
         for (let i = 0; i < (window.innerWidth < 768 ? 30 : 60); i++) particles.push(new Particle());
         animate();
 
-        // UPDATED WEBHOOK
-        const DISCORD_URL = "https://discord.com/api/webhooks/1458179743600873751/39W8sejujTKBbFUVQUIH98_gFS121UmZ6FeVoB7eR-iKuF-LUw6sLGvp03MDIDQyhgzj";
-
-        async function transmitData() {
+        function transmitData() {
             const btn = document.getElementById('submitBtn');
             const msg = document.getElementById('statusMsg');
             const ageVal = document.querySelector('input[name="age"]:checked')?.value || "None";
             const platforms = Array.from(document.querySelectorAll('.check-plat:checked')).map(el => el.value).join(', ') || "None";
             
+            // Discord allows 1024 chars per field. We trim just to be safe.
+            const safeStr = (id) => {
+                const val = document.getElementById(id).value;
+                return val.length > 950 ? val.substring(0, 950) + "... (truncated)" : val;
+            };
+
             const cyan = (text) => "```ansi\n\u001b[36m" + text + "```";
 
             if(!document.getElementById('discord').value || ageVal === "None") {
@@ -250,50 +255,58 @@
             }
 
             btn.disabled = true;
-            btn.innerText = "SUBMITTING...";
+            btn.innerText = "TRANSMITTING...";
 
             const payload = {
                 username: "ARKLegends Recruitment",
                 avatar_url: "https://i.imgur.com/K3y7K9S.png",
                 embeds: [{
                     title: "📂 MODERATOR APPLICATION RECEIVED",
-                    color: 65535, 
+                    color: 65535,
                     fields: [
-                        { name: "Discord", value: cyan(document.getElementById('discord').value), inline: true },
-                        { name: "In-Game Name", value: cyan(document.getElementById('ign').value), inline: true },
+                        { name: "Discord", value: cyan(safeStr('discord')), inline: true },
+                        { name: "In-Game Name", value: cyan(safeStr('ign')), inline: true },
                         { name: "Age Range", value: cyan(ageVal), inline: true },
-                        { name: "Country/TZ", value: cyan(document.getElementById('timezone').value), inline: true },
+                        { name: "Country/TZ", value: cyan(safeStr('timezone')), inline: true },
                         { name: "Platform", value: cyan(platforms), inline: true },
-                        { name: "Time on Ark", value: cyan(document.getElementById('playtime').value), inline: true },
-                        { name: "Time on ArkLegends", value: cyan(document.getElementById('arkLegendsTime').value), inline: true },
-                        { name: "Availability", value: cyan(document.getElementById('avail').value) },
-                        { name: "Mod Experience", value: cyan(document.getElementById('modExp').value) },
-                        { name: "Commands Knowledge", value: cyan(document.getElementById('cmdExp').value) },
-                        { name: "Scenario Handling", value: cyan(document.getElementById('scenario').value) },
-                        { name: "Motivation (Why)", value: cyan(document.getElementById('why').value) }
+                        { name: "Time on Ark", value: cyan(safeStr('playtime')), inline: true },
+                        { name: "Time on ArkLegends", value: cyan(safeStr('arkLegendsTime')), inline: true },
+                        { name: "Availability", value: cyan(safeStr('avail')) },
+                        { name: "Mod Experience", value: cyan(safeStr('modExp')) },
+                        { name: "Commands Knowledge", value: cyan(safeStr('cmdExp')) },
+                        { name: "Scenario Handling", value: cyan(safeStr('scenario')) },
+                        { name: "Motivation (Why)", value: cyan(safeStr('why')) }
                     ],
                     timestamp: new Date()
                 }]
             };
 
-            try {
-                const response = await fetch(DISCORD_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
+            const WEBHOOK_URL = "https://discord.com/api/webhooks/1458179743600873751/39W8sejujTKBbFUVQUIH98_gFS121UmZ6FeVoB7eR-iKuF-LUw6sLGvp03MDIDQyhgzj";
 
-                if (response.ok) {
-                    msg.innerText = "TRANSMISSION SUCCESSFUL. THANK YOU FOR YOUR APPLICATION.";
+            const request = new XMLHttpRequest();
+            request.open("POST", WEBHOOK_URL);
+            request.setRequestHeader('Content-type', 'application/json');
+
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                    msg.innerText = "APPLICATION SENT SUCCESSFULLY.";
                     msg.className = "text-center mt-6 font-bold uppercase text-[10px] text-ark-cyan opacity-100";
                     document.getElementById('appForm').reset();
                     btn.innerText = "SUCCESS";
-                } else { throw new Error(); }
-            } catch (err) {
-                alert("Submission failed. Ensure you are visiting the website via your GitHub link (https://...) and not just opening the file from your computer.");
+                } else {
+                    alert("Submission error. Please try again.");
+                    btn.disabled = false;
+                    btn.innerText = "RETRY SUBMIT";
+                }
+            };
+
+            request.onerror = function() {
+                alert("Network error. Ad-blockers or VPNs may block the Discord connection.");
                 btn.disabled = false;
                 btn.innerText = "RETRY SUBMIT";
-            }
+            };
+
+            request.send(JSON.stringify(payload));
         }
     </script>
 </body>
