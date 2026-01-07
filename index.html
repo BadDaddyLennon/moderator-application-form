@@ -44,7 +44,7 @@
         }
 
         .obsidian-panel {
-            background: rgba(10, 25, 30, 0.95);
+            background: rgba(10, 25, 30, 0.96);
             border: 1px solid rgba(0, 251, 255, 0.4);
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 251, 255, 0.05);
             position: relative;
@@ -171,23 +171,23 @@
 
             <div class="space-y-6">
                 <div>
-                    <label class="ember-label">Availability: Which days/times can you moderate?</label>
+                    <label class="ember-label" style="min-height: unset;">Availability: Which days/times can you moderate?</label>
                     <input type="text" id="avail" required class="ember-input px-4 py-3">
                 </div>
                 <div>
-                    <label class="ember-label">Previous moderation experience? (Please explain)</label>
+                    <label class="ember-label" style="min-height: unset;">Previous moderation experience? (Please explain)</label>
                     <textarea id="modExp" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
                 <div>
-                    <label class="ember-label">Are you familiar with in-game commands?</label>
+                    <label class="ember-label" style="min-height: unset;">Are you familiar with in-game commands?</label>
                     <textarea id="cmdExp" rows="2" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
                 <div>
-                    <label class="ember-label">Scenario: A player is toxic in global chat. How do you respond?</label>
+                    <label class="ember-label" style="min-height: unset;">Scenario: A player is toxic in global chat. How do you respond?</label>
                     <textarea id="scenario" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
                 <div>
-                    <label class="ember-label">Why do you want to be a moderator?</label>
+                    <label class="ember-label" style="min-height: unset;">Why do you want to be a moderator?</label>
                     <textarea id="why" rows="3" required class="ember-input px-4 py-3 resize-none"></textarea>
                 </div>
             </div>
@@ -233,7 +233,7 @@
         for (let i = 0; i < (window.innerWidth < 768 ? 30 : 60); i++) particles.push(new Particle());
         animate();
 
-        // UPDATED WEBHOOK URL
+        // UPDATED WEBHOOK
         const DISCORD_URL = "https://discord.com/api/webhooks/1458179743600873751/39W8sejujTKBbFUVQUIH98_gFS121UmZ6FeVoB7eR-iKuF-LUw6sLGvp03MDIDQyhgzj";
 
         async function transmitData() {
@@ -242,7 +242,6 @@
             const ageVal = document.querySelector('input[name="age"]:checked')?.value || "None";
             const platforms = Array.from(document.querySelectorAll('.check-plat:checked')).map(el => el.value).join(', ') || "None";
             
-            // CYAN ANSI COLOR CODE [36m
             const cyan = (text) => "```ansi\n\u001b[36m" + text + "```";
 
             if(!document.getElementById('discord').value || ageVal === "None") {
@@ -291,7 +290,7 @@
                     btn.innerText = "SUCCESS";
                 } else { throw new Error(); }
             } catch (err) {
-                alert("Submission failed. Ensure you are hosting this file online (e.g., GitHub Pages).");
+                alert("Submission failed. Ensure you are visiting the website via your GitHub link (https://...) and not just opening the file from your computer.");
                 btn.disabled = false;
                 btn.innerText = "RETRY SUBMIT";
             }
