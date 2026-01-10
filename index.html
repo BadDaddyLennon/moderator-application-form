@@ -241,7 +241,6 @@
             const ageVal = document.querySelector('input[name="age"]:checked')?.value || "None";
             const platforms = Array.from(document.querySelectorAll('.check-plat:checked')).map(el => el.value).join(', ') || "None";
             
-            // Discord allows 1024 chars per field. We trim just to be safe.
             const safeStr = (id) => {
                 const val = document.getElementById(id).value;
                 return val.length > 950 ? val.substring(0, 950) + "... (truncated)" : val;
@@ -281,7 +280,8 @@
                 }]
             };
 
-            const WEBHOOK_URL = "https://discord.com/api/webhooks/1458179743600873751/39W8sejujTKBbFUVQUIH98_gFS121UmZ6FeVoB7eR-iKuF-LUw6sLGvp03MDIDQyhgzj";
+            // WEBHOOK URL + THREAD ID PARAMS
+            const WEBHOOK_URL = "https://discord.com/api/webhooks/1459631306999599229/iupMtQCVAOzQs7bdOshKoj5lKChcB9RHACgJjzDbSe137DUrvzFdfnm2pLpcokiSpKKi?thread_id=1459654040081268929";
 
             const request = new XMLHttpRequest();
             request.open("POST", WEBHOOK_URL);
@@ -294,14 +294,14 @@
                     document.getElementById('appForm').reset();
                     btn.innerText = "SUCCESS";
                 } else {
-                    alert("Submission error. Please try again.");
+                    alert("Submission error. Status: " + request.status);
                     btn.disabled = false;
                     btn.innerText = "RETRY SUBMIT";
                 }
             };
 
             request.onerror = function() {
-                alert("Network error. Ad-blockers or VPNs may block the Discord connection.");
+                alert("Network error. Please disable VPN or Ad-Blockers.");
                 btn.disabled = false;
                 btn.innerText = "RETRY SUBMIT";
             };
