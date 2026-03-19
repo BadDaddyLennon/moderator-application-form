@@ -14,13 +14,16 @@
                         'legend-pink': '#ff00ff',
                         'legend-cyan': '#00fbff',
                     },
-                    fontFamily: { 'ark': ['Oxanium', 'cursive'] }
+                    fontFamily: { 
+                        'ark': ['Oxanium', 'cursive'],
+                        'cyber': ['Orbitron', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;800&family=Playfair+Display:ital,wght@1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;800&family=Orbitron:wght@900&display=swap');
         
         body {
             background-color: #050505;
@@ -39,20 +42,20 @@
             z-index: 1;
         }
 
+        /* NEW CYBER-DIAMOND TITLE FONT */
         .diamond-text {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
+            font-family: 'Orbitron', sans-serif;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 4px;
             color: #d4af37;
             background: linear-gradient(90deg, #d4af37, #f7e08a, #d4af37);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: shine 3s linear infinite;
-            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
-            line-height: 1.1;
+            filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6));
+            line-height: 1.2;
         }
 
         @keyframes shine {
@@ -181,6 +184,17 @@
                     </div>
                 </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <label class="ember-label">what console do you play on</label>
+                        <input type="text" id="consoleType" required placeholder="e.g. PC, PS5, Xbox" class="ember-input px-4 py-3 rounded">
+                    </div>
+                    <div>
+                        <label class="ember-label">how long have you been a member of the Survival Legends community</label>
+                        <input type="text" id="membershipTime" required placeholder="e.g. 6 Months" class="ember-input px-4 py-3 rounded">
+                    </div>
+                </div>
+
                 <div>
                     <label class="ember-label" style="min-height: unset;">which game do you want to moderate on</label>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-black/40 p-4 rounded-lg border border-white/10 mt-2">
@@ -294,6 +308,7 @@
                     color: 13938487, 
                     fields: [
                         { name: "Survivor Identity", value: `**Discord:** ${document.getElementById('discord').value}\n**IGN:** ${document.getElementById('ign').value}\n**Age:** ${ageVal}\n**TZ:** ${safeStr('timezone')}` },
+                        { name: "Hardware & Tenure", value: `**Console:** ${safeStr('consoleType')}\n**Community Member For:** ${safeStr('membershipTime')}` },
                         { name: "Target Games", value: formatAnswer(gamesSelected) },
                         { name: "Exp: Other SL Servers?", value: formatAnswer(safeStr('commTime')) },
                         { name: "Exp: Survival Games?", value: formatAnswer(safeStr('playtime')) },
